@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube 视频下载器</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #09f;
+            animation: spin 1s ease infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4 text-center">
+        <h1 class="text-3xl font-bold mb-4">YouTube 视频下载器</h1>
+        <p class="mb-4">输入 YouTube 视频链接以下载视频。</p>
+        <form action="/download" method="post" class="mb-4" id="downloadForm">
+            <input type="text" name="url" placeholder="输入 YouTube 链接" class="p-2 border border-gray-300 rounded w-full mb-2" required>
+            <button type="submit" class="bg-blue-500 text-white p-2 rounded hover:bg-blue-700 transition duration-300">下载</button>
+        </form>
+        <div id="loading" class="hidden loading-spinner mx-auto"></div>
+        <h2 class="text-2xl font-bold mb-2">已下载视频</h2>
+        <ul>
+            {% for video in videos %}
+            <li class="mb-4 p-4 bg-white shadow rounded text-left">
+                <h3 class="font-bold">{{ video.title }}</h3>
+                <p>时长: {{ video.duration }} 秒</p>
+                <p>作者: {{ video.uploader }}</p>
+                <p>描述: {{ video.description }}</p>
+                <p>文件大小: {{ video.filesize }} 字节</p>
+                <p>路径: {{ video.filepath }}</p>
+                <video controls class="w-full mt-2">
+                    <source src="{{ video.filepath }}" type="video/mp4">
+                    您的浏览器不支持 HTML5 视频标签。
+                </video>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <script>
+        const form = document.getElementById('downloadForm');
+        const loading = document.getElementById('loading');
+
+        form.addEventListener('submit', function() {
+            loading.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html> 
